@@ -6,10 +6,9 @@ from sklearn.metrics import roc_auc_score
 
 def arg_parse():
     parser = argparse.ArgumentParser()
-    print(parser)
-    parser.add_argument('--input-dir', type=str, default=None)
+    parser.add_argument('--input-model-dir', type=str, default=None)
+    parser.add_argument('--input-data-dir', type=str, default=None)
     parser.add_argument('--output-dir', type=str, default=None)
-    parser.add_argument('--model-dir', type=str, default=None)
     args, _ = parser.parse_known_args()
     print(f'Received arguments {args}')
     return args
@@ -17,13 +16,13 @@ def arg_parse():
 
 if __name__ == "__main__":
     args = arg_parse()
-    model_path = os.path.join(args.model_dir, 'model.tar.gz')
+    model_path = os.path.join(args.input_model_dir, 'model.tar.gz')
     with tarfile.open(model_path) as tar:
         tar.extractall(path=".")
     
     model = pickle.load(open("xgboost-model", "rb"))
 
-    test_csv_path = os.path.join(args.input_dir,'test.csv')
+    test_csv_path = os.path.join(args.input_data_dir,'test.csv')
     test = np.loadtxt(test_csv_path, delimiter=',')
     test_x = xgboost.DMatrix(test[:,1:])
     pred_y = model.predict(test_x)

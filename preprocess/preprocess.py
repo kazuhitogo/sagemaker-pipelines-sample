@@ -12,10 +12,10 @@ from glob import glob
 
 def arg_parse():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--raw-input-dir', type=str, default=None)
-    parser.add_argument('--lasttime-train-input-dir', type=str, default=None)
-    parser.add_argument('--lasttime-valid-input-dir', type=str, default=None)
-    parser.add_argument('--lasttime-test-input-dir', type=str, default=None)
+    parser.add_argument('--raw-data-input-dir', type=str, default=None)
+    parser.add_argument('--pre-processed-train-data-input-dir', type=str, default=None)
+    parser.add_argument('--pre-processed-valid-data-input-dir', type=str, default=None)
+    parser.add_argument('--pre-processed-test-data-input-dir', type=str, default=None)
     parser.add_argument('--train-output-dir', type=str, default=None)
     parser.add_argument('--valid-output-dir', type=str, default=None)
     parser.add_argument('--test-output-dir', type=str, default=None)
@@ -28,7 +28,7 @@ if __name__=='__main__':
     # csv ファイルの読み込み
     # 複数ファイルが raw_input_dir に配置されたら全て縦に concat する
     df_list = []
-    for csv_file in glob(args.raw_input_dir+'/*.csv'):
+    for csv_file in glob(args.raw_data_input_dir+'/*.csv'):
         tmp_df = pd.read_csv(csv_file)
         df_list.append(tmp_df)
     df = pd.concat(df_list,axis=0)
@@ -72,15 +72,15 @@ if __name__=='__main__':
     # 過去の前処理済データをマージ
     if args.merge:
         # train
-        lasttime_train_input_path = os.path.join(args.lasttime_train_input_dir, 'train.csv')
+        lasttime_train_input_path = os.path.join(args.pre_processed_train_data_input_dir, 'train.csv')
         lasttime_train_df = pd.read_csv(lasttime_train_input_path, header=None, names=df.columns.tolist())
         train_df = pd.concat([train_df,lasttime_train_df],axis=0)
         # valid
-        lasttime_valid_input_path = os.path.join(args.lasttime_valid_input_dir, 'valid.csv')
+        lasttime_valid_input_path = os.path.join(args.pre_processed_valid_data_input_dir, 'valid.csv')
         lasttime_valid_df = pd.read_csv(lasttime_valid_input_path, header=None, names=df.columns.tolist())
         valid_df = pd.concat([valid_df,lasttime_valid_df],axis=0)
         # test
-        lasttime_test_input_path = os.path.join(args.lasttime_test_input_dir, 'test.csv')
+        lasttime_test_input_path = os.path.join(args.pre_processed_test_data_input_dir, 'test.csv')
         lasttime_test_df = pd.read_csv(lasttime_test_input_path, header=None, names=df.columns.tolist())
         test_df = pd.concat([test_df,lasttime_test_df],axis=0)
     
