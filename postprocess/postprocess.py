@@ -9,6 +9,8 @@ def arg_parse():
     parser.add_argument('--input-model-dir', type=str, default=None)
     parser.add_argument('--input-data-dir', type=str, default=None)
     parser.add_argument('--output-dir', type=str, default=None)
+    parser.add_argument('--output-file', type=str, default='evaluation.json')
+    
     args, _ = parser.parse_known_args()
     print(f'Received arguments {args}')
     return args
@@ -42,7 +44,7 @@ if __name__ == "__main__":
         },
     }
 
-    eval_result_path = os.path.join(args.output_dir, 'evaluation.json')
+    eval_result_path = os.path.join(args.output_dir, args.output_file)
     with open(eval_result_path, "w") as f:
         f.write(json.dumps(report_dict))
     exit()
