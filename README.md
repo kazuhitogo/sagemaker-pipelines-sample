@@ -1,4 +1,4 @@
-# sagemaker-pilelines-sample
+# sagemaker-pipelines-sample
 
 SageMaker Pipelines のサンプルコードです。  
 SageMaker Studio にこのリポジトリを clone して、  
